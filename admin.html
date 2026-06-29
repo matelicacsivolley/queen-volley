@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pannello Organizzatore - Queen Volley</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --primary-color: #d4af37;
+            --primary-hover: #f3e5ab;
+            --text-color: #ffffff;
+            --text-muted: #aaaaaa;
+            --border-color: #333333;
+            --accent-accent: #8b1e0f;
+            --status-standby: #d97706;
+            --status-confirmed: #16a34a;
+            --btn-email: #2563eb;
+            --btn-email-hover: #3b82f6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: 300px; background-color: var(--surface-color); border-right: 1px solid var(--border-color);
+            padding: 25px; display: flex; flex-direction: column; gap: 20px; position: fixed; height: 100vh;
+        }
+        .sidebar h2 { color: var(--primary-color); font-size: 20px; text-transform: uppercase; }
+
+        .stats-panel { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; }
+        .stat-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
+
+        .main-content { margin-left: 300px; flex-grow: 1; padding: 40px; }
+        .section-panel { background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 25px; }
+        .section-title { font-size: 18px; color: var(--primary-color); margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; text-transform: uppercase; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+        th { background-color: rgba(0, 0, 0, 0.4); color: var(--primary-color); padding: 12px; border-bottom: 2px solid var(--border-color); }
+        td { padding: 12px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+
+        .team-clickable {
+            color: var(--text-color);
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color 0.2s;
+        }
+        .team-clickable:hover { color: var(--primary-color); }
+
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .badge-standby { background-color: rgba(217, 119, 6, 0.2); color: var(--status-standby); border: 1px solid var(--status-standby); }
+        .badge-confirmed { background-color: rgba(22, 163, 74, 0.2); color: var(--status-confirmed); border: 1px solid var(--status-confirmed); }
+
+        .btn { padding: 12px 18px; font-size: 14px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; width: 100%; text-align: center; }
+        .btn-secondary { background-color: var(--primary-color); color: #000; }
+        .btn-danger { background-color: var(--accent-accent); color: white; font-size: 11px; padding: 6px; margin-top: auto;}
+        
+        .btn-notify {
+            background-color: var(--btn-email); color: white; padding: 6px 10px; 
+            border: none; border-radius: 4px; font-weight: bold; cursor: pointer; 
+            font-size: 12px; display: inline-flex; align-items: center; gap: 5px; transition: background 0.2s;
+        }
+        .btn-notify:hover { background-color: var(--btn-email-hover); }
+
+        select { background-color: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); padding: 5px 8px; border-radius: 4px; font-size: 12px; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.75); display: flex;
+            justify-content: center; align-items: center; z-index: 1000;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-box {
+            background-color: var(--surface-color); border: 1px solid var(--border-color);
+            border-radius: 10px; width: 90%; max-width: 850px; max-height: 85vh;
+            overflow-y: auto; padding: 30px; position: relative;
+        }
+        .close-modal-btn { position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; }
+        .close-modal-btn:hover { color: var(--accent-accent); }
+        .modal-team-title { color: var(--primary-color); font-size: 22px; margin-bottom: 5px; text-transform: uppercase; }
+        .modal-team-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+        .player-detail-row { background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 15px; }
+        .player-detail-row h4 { color: var(--primary-hover); font-size: 14px; margin-bottom: 10px; text-transform: uppercase; }
+        .player-grid-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; font-size: 13px; }
+        .player-grid-info strong { color: var(--text-muted); font-weight: normal; font-size: 12px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Queen Volley</h2>
+        <p style="font-size: 12px; color: var(--text-muted);">Pannello Organizzazione</p>
+        
+        <div class="stats-panel">
+            <div class="stat-row"><span>Squadre:</span> <strong id="stat-total-teams">0</strong></div>
+            <div class="stat-row"><span>Stand-by:</span> <strong id="stat-standby-teams" style="color: var(--status-standby);">0</strong></div>
+            <div class="stat-row"><span>Confermate:</span> <strong id="stat-confirmed-teams" style="color: var(--status-confirmed);">0</strong></div>
+            <div class="stat-row"><span>Atleti iscritti:</span> <strong id="stat-total-players">0</strong></div>
+        </div>
+
+        <button class="btn btn-secondary" onclick="exportToCSV()">Esporta in Excel (CSV)</button>
+        <button class="btn btn-danger" onclick="clearDatabase()">Svuota Database Online</button>
+    </div>
+
+    <div class="main-content">
+        <div class="section-panel">
+            <div class="section-title">Iscrizioni Ricevute (Controllo Bonifici)</div>
+            <table style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Squadra (Dettagli)</th>
+                        <th>Referente</th>
+                        <th>Atleti</th>
+                        <th>Stato</th>
+                        <th>Cambia Stato</th>
+                        <th>Notifica</th>
+                    </tr>
+                </thead>
+                <tbody id="adminTableBody">
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: var(--primary-color);">Caricamento iscrizioni in corso da Google Fogli...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="detailsModal">
+        <div class="modal-box">
+            <button class="close-modal-btn" onclick="closeModal()">&times;</button>
+            <h3 class="modal-team-title" id="modalTeamName">NOME SQUADRA</h3>
+            <div class="modal-team-meta" id="modalTeamMeta">Dati referente...</div>
+            <div id="modalPlayersList"></div>
+        </div>
+    </div>
+
+    <script>
+        const sheetDB_URL = "https://sheetdb.io/api/v1/tzegsltyrmo8g";
+        let database = []; 
+
+        function loadData() {
+            fetch(sheetDB_URL)
+                .then(response => response.json())
+                .then(apiRows => {
+                    // Raggruppiamo i singoli atleti provenienti da SheetDB per Squadra
+                    const teamsMap = {};
+                    
+                    apiRows.forEach(row => {
+                        const teamName = row.nomeSquadra;
+                        if (!teamName) return;
+
+                        if (!teamsMap[teamName]) {
+                            // Se lo stato non è salvato nel foglio, di base mettiamo 'stand-by'
+                            let statoIniziale = (row.stato || 'stand-by').toLowerCase().trim();
+                            if(statoIniziale !== 'confermato') statoIniziale = 'stand-by';
+
+                            teamsMap[teamName] = {
+                                id: teamName, 
+                                dataIscrizione: row.dataIscrizione || '',
+                                nomeSquadra: teamName,
+                                referente: row.referente || '',
+                                telefono: row.telefono || '',
+                                email: row.email || '',
+                                stato: statoIniziale,
+                                giocatori: []
+                            };
+                        }
+
+                        // Aggiunge l'atleta alla squadra
+                        if (row.cognome || row.nome) {
+                            teamsMap[teamName].giocatori.push({
+                                cognome: row.cognome || '',
+                                nome: row.nome || '',
+                                codiceFiscale: row.codiceFiscale || '',
+                                dataNascita: row.dataNascita || '',
+                                luogoNascita: row.luogoNascita || '',
+                                indirizzo: row.indirizzo || '',
+                                taglia: row.taglia || 'M'
+                            });
+                        }
+                    });
+
+                    // Trasformiamo la mappa in un array ordinato per l'interfaccia
+                    database = Object.values(teamsMap);
+                    updateAdminPanel();
+                })
+                .catch(error => {
+                    console.error('Errore nel caricamento dei dati cloud:', error);
+                    document.getElementById('adminTableBody').innerHTML = `
+                        <tr><td colspan="7" style="text-align: center; color: #ff4444;">Errore nel caricamento dei dati da SheetDB.</td></tr>
+                    `;
+                });
+        }
+
+        function changeStatus(teamName, newStatus) {
+            // Aggiorna lo stato localmente
+            database = database.map(team => {
+                if (team.nomeSquadra === teamName) team.stato = newStatus;
+                return team;
+            });
+
+            // Aggiorna lo stato anche online su SheetDB per tutte le righe di quella squadra
+            fetch(`${sheetDB_URL}/nomeSquadra/${encodeURIComponent(teamName)}`, {
+                method: 'PATCH',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ data: { stato: newStatus } })
+            })
+            .then(res => res.json())
+            .then(result => {
+                console.log("Stato sincronizzato online:", result);
+                updateAdminPanel();
+            })
+            .catch(err => {
+                console.error("Errore di sincronizzazione stato:", err);
+                alert("Stato modificato a schermo ma impossibile aggiornare Google Fogli. Controlla la connessione.");
+            });
+        }
+
+        function updateAdminPanel() {
+            const tbody = document.getElementById('adminTableBody');
+            tbody.innerHTML = '';
+            let standbyCount = 0, confirmedCount = 0, totalPlayers = 0;
+
+            if (database.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Nessuna squadra iscritta al momento.</td></tr>`;
+            }
+
+            database.forEach((team, index) => {
+                if (team.stato === 'stand-by') standbyCount++;
+                if (team.stato === 'confermato') confirmedCount++;
+                totalPlayers += team.giocatori.length;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${team.dataIscrizione}</td>
+                    <td><strong class="team-clickable" onclick="showTeamDetails(${index})">${team.nomeSquadra}</strong></td>
+                    <td>${team.referente}<br><small style="color:var(--text-muted)">${team.telefono}</small></td>
+                    <td>${team.giocatori.length} Atleti</td>
+                    <td><span class="badge ${team.stato === 'stand-by' ? 'badge-standby' : 'badge-confirmed'}">${team.stato}</span></td>
+                    <td>
+                        <select onchange="changeStatus('${team.nomeSquadra}', this.value)">
+                            <option value="stand-by" ${team.stato === 'stand-by' ? 'selected' : ''}>Stand-by</option>
+                            <option value="confermato" ${team.stato === 'confermato' ? 'selected' : ''}>Confermato</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn-notify" onclick="sendConfirmationEmail(${index})">
+                            ✉ Invia Conferma
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('stat-total-teams').innerText = database.length;
+            document.getElementById('stat-standby-teams').innerText = standbyCount;
+            document.getElementById('stat-confirmed-teams').innerText = confirmedCount;
+            document.getElementById('stat-total-players').innerText = totalPlayers;
+        }
+
+        function sendConfirmationEmail(index) {
+            const team = database[index];
+            if (!team) return;
+
+            const emailDestinatario = team.email;
+            const oggetto = encodeURIComponent(`CONFERMATA – Iscrizione Torneo Queen Volley 2026: ${team.nomeSquadra}`);
+            
+            const corpoEmail = encodeURIComponent(
+                `Ciao ${team.referente},\n\n` +
+                `ti confermiamo che abbiamo ricevuto il bonifico per la squadra "${team.nomeSquadra}".\n\n` +
+                `La vostra iscrizione al torneo Queen Volley 2026 (5-7 Agosto) è ora ufficialmente CONFERMATA!\n\n` +
+                `I dati dei tuoi atleti sono stati registrati correttamente .\n\n` +
+                `Ci vediamo sul campo allo Stadio Comunale Giovanni Paolo II.\n\n` +
+                `Buon torneo,\n` +
+                `L'Organizzazione`
+            );
+
+            window.location.href = `mailto:${emailDestinatario}?subject=${oggetto}&body=${corpoEmail}`;
+        }
+
+        function showTeamDetails(index) {
+            const team = database[index];
+            if (!team) return;
+
+            document.getElementById('modalTeamName').innerText = team.nomeSquadra;
+            document.getElementById('modalTeamMeta').innerHTML = `
+                <strong>Referente:</strong> ${team.referente} | Tel: ${team.telefono} | Email: ${team.email}
+            `;
+
+            const playersContainer = document.getElementById('modalPlayersList');
+            playersContainer.innerHTML = '';
+
+            team.giocatori.forEach((p, idx) => {
+                const card = document.createElement('div');
+                card.className = 'player-detail-row';
+                card.innerHTML = `
+                    <h4>Atleta ${idx + 1}: ${p.cognome.toUpperCase()} ${p.nome.toUpperCase()}</h4>
+                    <div class="player-grid-info">
+                        <div><strong>Codice Fiscale</strong>${p.codiceFiscale || 'N/D'}</div>
+                        <div><strong>Data di Nascita</strong>${p.dataNascita || 'N/D'}</div>
+                        <div><strong>Luogo di Nascita</strong>${p.luogoNascita || 'N/D'}</div>
+                        <div style="grid-column: span 2;"><strong>Indirizzo Residenza</strong>${p.indirizzo || 'N/D'}</div>
+                        <div><strong>Taglia Maglia</strong>${p.taglia || 'M'}</div>
+                    </div>
+                `;
+                playersContainer.appendChild(card);
+            });
+
+            document.getElementById('detailsModal').classList.add('active');
+        }
+
+        function closeModal() { document.getElementById('detailsModal').classList.remove('active'); }
+        window.onclick = function(e) { if (e.target === document.getElementById('detailsModal')) closeModal(); }
+
+        function exportToCSV() {
+            if (database.length === 0) { alert("Nessun dato da esportare."); return; }
+            let csv = "data:text/csv;charset=utf-8,Squadra;Stato;Referente;Telefono;Email;Cognome;Nome;DataNascita;LuogoNascita;Indirizzo Residenza;CodiceFiscale;Taglia\n";
+            database.forEach(t => {
+                t.giocatori.forEach(p => {
+                    csv += `"${t.nomeSquadra}";"${t.stato.toUpperCase()}";"${t.referente}";"${t.telefono}";"${t.email}";"${p.cognome}";"${p.nome}";"${p.dataNascita}";"${p.luogoNascita}";"${p.indirizzo}";"${p.codiceFiscale}";"${p.taglia}"\n`;
+                });
+            });
+            const link = document.createElement("a");
+            link.setAttribute("href", encodeURI(csv));
+            link.setAttribute("download", "Iscrizioni_QueenVolley.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function clearDatabase() {
+            if(confirm("ATTENZIONE: Questa azione eliminerà DEFINITIVAMENTE tutte le iscrizioni direttamente dal cloud su Google Fogli. Continuare?")) {
+                fetch(sheetDB_URL, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ column: 'nomeSquadra', value: '*' })
+                })
+                .then(res => res.json())
+                .then(() => {
+                    alert("Database online svuotato!");
+                    loadData();
+                })
+                .catch(err => alert("Errore nello svuotamento del database cloud."));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>

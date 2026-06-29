@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iscrizione Torneo - Queen Volley</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --primary-color: #d4af37;
+            --primary-hover: #f3e5ab;
+            --text-color: #ffffff;
+            --text-muted: #aaaaaa;
+            --border-color: #333333;
+            --success-color: #16a34a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); padding: 20px; display: flex; justify-content: center; }
+
+        .container { width: 100%; max-width: 700px; background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h2 { color: var(--primary-color); text-transform: uppercase; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; font-size: 22px; text-align: center; }
+        h3 { color: var(--primary-hover); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px 0; }
+
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
+        label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
+        input, select { background-color: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); padding: 10px; border-radius: 4px; font-size: 14px; width: 100%; }
+        input:focus, select:focus { border-color: var(--primary-color); outline: none; }
+
+        .player-row { background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 15px; position: relative; }
+        .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .full-width { grid-column: span 2; }
+
+        .btn { padding: 12px; font-size: 14px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s; text-transform: uppercase; width: 100%; margin-top: 10px; }
+        .btn-primary { background-color: var(--primary-color); color: #000; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-secondary { background-color: transparent; color: var(--text-muted); border: 1px dashed var(--border-color); }
+        .btn-secondary:hover { border-color: var(--primary-color); color: var(--primary-color); }
+        
+        .remove-btn { position: absolute; top: 10px; right: 10px; background: transparent; border: none; color: #8b1e0f; cursor: pointer; font-size: 12px; text-transform: uppercase; font-weight: bold; }
+
+        #loading { display: none; text-align: center; color: var(--primary-color); font-weight: bold; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Iscrizione Queen Volley 2026</h2>
+    
+    <form id="registrationForm">
+        <!-- DATI SQUADRA -->
+        <h3>Dati della Squadra</h3>
+        <div class="form-group">
+            <label>Nome Squadra *</label>
+            <input type="text" id="nomeSquadra" required>
+        </div>
+        <div class="form-group">
+            <label>Nome e Cognome Referente *</label>
+            <input type="text" id="referente" required>
+        </div>
+        <div class="form-group">
+            <label>Telefono Cellulare *</label>
+            <input type="tel" id="telefono" required>
+        </div>
+        <div class="form-group">
+            <label>Indirizzo E-mail Referente *</label>
+            <input type="email" id="email" required>
+        </div>
+
+        <!-- LISTA GIOCATORI -->
+        <h3>Atleti della Squadra (Minimo 4)</h3>
+        <div id="playersContainer">
+            <!-- I blocchi dei giocatori verranno inseriti qui da JavaScript -->
+        </div>
+
+        <button type="button" class="btn btn-secondary" onclick="addPlayerForm()">+ Aggiungi Atleta</button>
+        <button type="submit" class="btn btn-primary" style="margin-top: 30px;">Invia Iscrizione Online</button>
+        
+        <div id="loading">Invio dei dati al cloud in corso... Attendere...</div>
+    </form>
+</div>
+
+<script>
+    let playerCount = 0;
+    const sheetDB_URL = "https://sheetdb.io/api/v1/tzegsltyrmo8g"; 
+
+    function addPlayerForm() {
+        playerCount++;
+        const container = document.getElementById('playersContainer');
+        
+        const playerBox = document.createElement('div');
+        playerBox.className = 'player-row';
+        playerBox.id = `player_box_${playerCount}`;
+        
+        playerBox.innerHTML = `
+            ${playerCount > 4 ? `<button type="button" class="remove-btn" onclick="removePlayerForm(${playerCount})">Rimuovi</button>` : ''}
+            <strong style="display:block; margin-bottom:10px; color:var(--primary-color); font-size:12px;">ATLETA ${playerCount}</strong>
+            <div class="player-grid">
+                <div class="form-group"><label>Cognome *</label><input type="text" class="p-cognome" required></div>
+                <div class="form-group"><label>Nome *</label><input type="text" class="p-nome" required></div>
+                <div class="form-group"><label>Codice Fiscale *</label><input type="text" class="p-cf" placeholder="16 caratteri" maxlength="16" style="text-transform:uppercase" required></div>
+                <div class="form-group"><label>Data di Nascita *</label><input type="date" class="p-data" required></div>
+                <div class="form-group"><label>Luogo di Nascita *</label><input type="text" class="p-luogo" required></div>
+                <div class="form-group"><label>Taglia Maglia *</label>
+                    <select class="p-taglia" required>
+                        <option value="S">S</option><option value="M" selected>M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option>
+                    </select>
+                </div>
+                <div class="form-group full-width"><label>Indirizzo di Residenza (Via, Città, CAP) *</label><input type="text" class="p-indirizzo" placeholder="Es. Via Roma 10, Matelica (MC) - 62024" required></div>
+            </div>
+        `;
+        container.appendChild(playerBox);
+    }
+
+    function removePlayerForm(id) {
+        const box = document.getElementById(`player_box_${id}`);
+        if(box) box.remove();
+    }
+
+    // Genera i primi 4 moduli obbligatori all'avvio
+    for(let i=0; i<4; i++) { addPlayerForm(); }
+
+    // GESTIONE DELL'INVIO ONLINE
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        document.getElementById('loading').style.display = 'block';
+        
+        const dataIscrizione = new Date().toLocaleDateString('it-IT');
+        const nomeSquadra = document.getElementById('nomeSquadra').value;
+        const referente = document.getElementById('referente').value;
+        const telefono = document.getElementById('telefono').value;
+        const email = document.getElementById('email').value;
+
+        // Raccogliamo i dati di tutti i giocatori compilati
+        const rows = document.querySelectorAll('.player-row');
+        const rowsData = [];
+
+        rows.forEach(row => {
+            rowsData.push({
+                dataIscrizione: dataIscrizione,
+                nomeSquadra: nomeSquadra,
+                referente: referente,
+                telefono: telefono,
+                email: email,
+                cognome: row.querySelector('.p-cognome').value,
+                nome: row.querySelector('.p-nome').value,
+                codiceFiscale: row.querySelector('.p-cf').value.toUpperCase(),
+                dataNascita: row.querySelector('.p-data').value,
+                luogoNascita: row.querySelector('.p-luogo').value,
+                indirizzo: row.querySelector('.p-indirizzo').value,
+                taglia: row.querySelector('.p-taglia').value
+            });
+        });
+
+        // Invio dei dati a Google Fogli tramite chiamata API
+        fetch(sheetDB_URL, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ data: rowsData })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('loading').style.display = 'none';
+            alert("Iscrizione inviata con successo! I dati sono stati salvati online.\n\nProcedi ora al pagamento del bonifico bancario come indicato dal regolamento.");
+            document.getElementById('registrationForm').reset();
+        })
+        .catch(error => {
+            document.getElementById('loading').style.display = 'none';
+            console.error('Errore:', error);
+            alert("Si è verificato un errore durante il salvataggio online. Riprova più tardi.");
+        });
+    });
+</script>
+
+</body>
+</html>
