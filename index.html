@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iscrizione Torneo - Queen Volley</title>
+    <title>Iscrizione Queen Volley 2026</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -13,169 +13,370 @@
             --text-color: #ffffff;
             --text-muted: #aaaaaa;
             --border-color: #333333;
-            --success-color: #16a34a;
+            --accent-color: #8b1e0f;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); color: var(--text-color); padding: 20px; display: flex; justify-content: center; }
-
-        .container { width: 100%; max-width: 700px; background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h2 { color: var(--primary-color); text-transform: uppercase; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; font-size: 22px; text-align: center; }
-        h3 { color: var(--primary-hover); font-size: 14px; text-transform: uppercase; margin: 20px 0 10px 0; }
-
-        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; }
-        label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
-        input, select { background-color: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); padding: 10px; border-radius: 4px; font-size: 14px; width: 100%; }
-        input:focus, select:focus { border-color: var(--primary-color); outline: none; }
-
-        .player-row { background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 15px; position: relative; }
-        .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .full-width { grid-column: span 2; }
-
-        .btn { padding: 12px; font-size: 14px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s; text-transform: uppercase; width: 100%; margin-top: 10px; }
-        .btn-primary { background-color: var(--primary-color); color: #000; }
-        .btn-primary:hover { background-color: var(--primary-hover); }
-        .btn-secondary { background-color: transparent; color: var(--text-muted); border: 1px dashed var(--border-color); }
-        .btn-secondary:hover { border-color: var(--primary-color); color: var(--primary-color); }
         
-        .remove-btn { position: absolute; top: 10px; right: 10px; background: transparent; border: none; color: #8b1e0f; cursor: pointer; font-size: 12px; text-transform: uppercase; font-weight: bold; }
+        html, body { height: 100%; }
+        body { 
+            display: flex; 
+            flex-direction: column;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            line-height: 1.6; 
+        }
+        
+        .site-header {
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo-matelica {
+            height: 85px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
+        }
+        .logo-queen {
+            height: 55px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
+        }
+        
+        .main-content { flex: 1; padding: 20px; }
+        
+        .container { max-width: 700px; margin: 40px auto; background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: var(--primary-color); margin-bottom: 10px; text-transform: uppercase; font-size: 26px; letter-spacing: 1px; }
+        .subtitle { text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 30px; }
+        
+        .form-section { border: 1px solid var(--border-color); padding: 20px; border-radius: 6px; margin-bottom: 25px; background: rgba(0,0,0,0.2); }
+        .section-title { font-size: 16px; color: var(--primary-color); margin-bottom: 15px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+        
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 5px; font-weight: 500; }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select {
+            width: 100%; padding: 10px; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-color); font-size: 14px; transition: border 0.2s;
+        }
+        input:focus, select:focus { border-color: var(--primary-color); outline: none; }
+        
+        .player-row { border-bottom: 1px dashed var(--border-color); padding-bottom: 15px; margin-bottom: 15px; }
+        .player-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+        .player-title { font-size: 14px; color: var(--primary-hover); margin-bottom: 10px; font-weight: bold; }
+        
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        
+        @media (max-width: 600px) {
+            .grid-3, .grid-2 { grid-template-columns: 1fr; }
+            .site-header { 
+                flex-direction: column; 
+                gap: 15px; 
+                text-align: center;
+                justify-content: center;
+            }
+        }
+        
+        .btn { display: block; width: 100%; padding: 14px; background-color: var(--primary-color); color: #000; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: background 0.2s; }
+        .btn:hover { background-color: var(--primary-hover); }
+        .btn:disabled { background-color: var(--border-color); color: var(--text-muted); cursor: not-allowed; }
 
-        #loading { display: none; text-align: center; color: var(--primary-color); font-weight: bold; margin-top: 15px; }
+        /* Stile specifico per il tasto Aggiungi Atleta, più discreto ma coordinato */
+        .btn-secondary { background-color: transparent; color: var(--primary-color); border: 1px dashed var(--primary-color); padding: 10px; font-size: 14px; margin-top: 10px; }
+        .btn-secondary:hover { background-color: rgba(212, 175, 55, 0.1); color: var(--primary-hover); }
+
+        .iban-box { background: rgba(0,0,0,0.4); border: 1px solid var(--primary-color); padding: 20px; border-radius: 6px; text-align: left; max-width: 550px; margin: 20px auto; }
+        .iban-box h4 { color: var(--primary-color); margin-bottom: 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .iban-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
+        .iban-code { color: var(--text-color); font-family: monospace; font-size: 15px; letter-spacing: 1px; font-weight: bold; background: rgba(255,255,255,0.05); padding: 3px 6px; border-radius: 4px; }
+
+        .site-footer {
+            background-color: var(--surface-color);
+            border-top: 1px solid var(--border-color);
+            padding: 30px 20px 15px 20px;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+        .footer-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding-bottom: 20px;
+        }
+        .footer-section h3 {
+            color: var(--primary-color);
+            font-size: 15px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+        .footer-section p, .footer-section ul {
+            margin-bottom: 8px;
+        }
+        .footer-section ul {
+            list-style: none;
+        }
+        .footer-section ul li {
+            margin-bottom: 6px;
+        }
+        .footer-section a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+        .footer-bottom {
+            max-width: 1100px;
+            margin: 20px auto 0 auto;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Iscrizione Queen Volley 2026</h2>
-    
-    <form id="registrationForm">
-        <!-- DATI SQUADRA -->
-        <h3>Dati della Squadra</h3>
-        <div class="form-group">
-            <label>Nome Squadra *</label>
-            <input type="text" id="nomeSquadra" required>
-        </div>
-        <div class="form-group">
-            <label>Nome e Cognome Referente *</label>
-            <input type="text" id="referente" required>
-        </div>
-        <div class="form-group">
-            <label>Telefono Cellulare *</label>
-            <input type="tel" id="telefono" required>
-        </div>
-        <div class="form-group">
-            <label>Indirizzo E-mail Referente *</label>
-            <input type="email" id="email" required>
-        </div>
+    <header class="site-header">
+        <img src="logoVettoriale.png" alt="Logo Matelica Volley" class="logo-matelica">
+        <img src="logoQueenVolley.png" alt="Logo Queen Volley" class="logo-queen">
+    </header>
 
-        <!-- LISTA GIOCATORI -->
-        <h3>Atleti della Squadra (Minimo 4)</h3>
-        <div id="playersContainer">
-            <!-- I blocchi dei giocatori verranno inseriti qui da JavaScript -->
-        </div>
-
-        <button type="button" class="btn btn-secondary" onclick="addPlayerForm()">+ Aggiungi Atleta</button>
-        <button type="submit" class="btn btn-primary" style="margin-top: 30px;">Invia Iscrizione Online</button>
-        
-        <div id="loading">Invio dei dati al cloud in corso... Attendere...</div>
-    </form>
-</div>
-
-<script>
-    let playerCount = 0;
-    const sheetDB_URL = "https://sheetdb.io/api/v1/tzegsltyrmo8g"; 
-
-    function addPlayerForm() {
-        playerCount++;
-        const container = document.getElementById('playersContainer');
-        
-        const playerBox = document.createElement('div');
-        playerBox.className = 'player-row';
-        playerBox.id = `player_box_${playerCount}`;
-        
-        playerBox.innerHTML = `
-            ${playerCount > 4 ? `<button type="button" class="remove-btn" onclick="removePlayerForm(${playerCount})">Rimuovi</button>` : ''}
-            <strong style="display:block; margin-bottom:10px; color:var(--primary-color); font-size:12px;">ATLETA ${playerCount}</strong>
-            <div class="player-grid">
-                <div class="form-group"><label>Cognome *</label><input type="text" class="p-cognome" required></div>
-                <div class="form-group"><label>Nome *</label><input type="text" class="p-nome" required></div>
-                <div class="form-group"><label>Codice Fiscale *</label><input type="text" class="p-cf" placeholder="16 caratteri" maxlength="16" style="text-transform:uppercase" required></div>
-                <div class="form-group"><label>Data di Nascita *</label><input type="date" class="p-data" required></div>
-                <div class="form-group"><label>Luogo di Nascita *</label><input type="text" class="p-luogo" required></div>
-                <div class="form-group"><label>Taglia Maglia *</label>
-                    <select class="p-taglia" required>
-                        <option value="S">S</option><option value="M" selected>M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option>
-                    </select>
+    <div class="main-content">
+        <div class="container" id="formContainer">
+            <h1>Queen Volley 2026</h1>
+            <p class="subtitle">Modulo di Iscrizione Ufficiale (4x4 Misto • 5-7 Agosto)</p>
+            
+            <form id="registrationForm">
+                <!-- SEZIONE SQUADRA -->
+                <div class="form-section">
+                    <div class="section-title">Dati della Squadra</div>
+                    <div class="form-group">
+                        <label for="nomeSquadra">Nome Squadra *</label>
+                        <input type="text" id="nomeSquadra" required placeholder="Es. I Bagheroni">
+                    </div>
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label for="referente">Nome Referente *</label>
+                            <input type="text" id="referente" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Telefono *</label>
+                            <input type="tel" id="telefono" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" required>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group full-width"><label>Indirizzo di Residenza (Via, Città, CAP) *</label><input type="text" class="p-indirizzo" placeholder="Es. Via Roma 10, Matelica (MC) - 62024" required></div>
+
+                <!-- SEZIONE ATLETI -->
+                <div class="form-section">
+                    <div class="section-title">Atleti Iscritti (Minimo 4)</div>
+                    <div id="playersContainer">
+                        <!-- Generati dinamicamente via JS -->
+                    </div>
+                    <!-- NUOVO TASTO AGGIUNGI ATLETA -->
+                    <button type="button" class="btn btn-secondary" id="addPlayerBtn">+ Aggiungi Atleta</button>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn">Invia Iscrizione</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h3>Contatti & Info</h3>
+                <p>📍 <strong>Luogo:</strong> Stadio Comunale Giovanni Paolo II, Matelica</p>
+                <p>📞 <strong>Infoline:</strong> <a href="tel:+393395831457">+39 3395831457</a> (RICCARDO)</p>
+                <p>📞 <strong>Infoline:</strong> <a href="tel:+393409050266">+39 3409050266</a> (LIDIA)</p>
+                <p>✉️ <strong>Email:</strong> <a href="mailto:matelicavolleyasd@gmail.com">matelicavolleyasd@gmail.com</a></p>
             </div>
-        `;
-        container.appendChild(playerBox);
-    }
+            
+            <div class="footer-section">
+                <h3>Dettagli Torneo</h3>
+                <p>⏳ <strong>Chiusura Iscrizioni:</strong> Mercoledì 22 Luglio 2026 ore 00.00 o al raggiungimento dei 16 posti disponibili.</p>
+                <p>🏐 <strong>Formula:</strong> Torneo 4x4 Misto (almeno 2 donne sempre in campo).</p>
+                <p>👕 <strong>Incluso:</strong> Maglia ufficiale dell'evento per ogni atleta iscritto (le taglie potrebbero variare in base alla disponibilità).</p>
+                <p>💵 <strong>Costo iscrizione:</strong> 15€ a persona.</p>
+            </div>
 
-    function removePlayerForm(id) {
-        const box = document.getElementById(`player_box_${id}`);
-        if(box) box.remove();
-    }
-
-    // Genera i primi 4 moduli obbligatori all'avvio
-    for(let i=0; i<4; i++) { addPlayerForm(); }
-
-    // GESTIONE DELL'INVIO ONLINE
-    document.getElementById('registrationForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        document.getElementById('loading').style.display = 'block';
+            <div class="footer-section">
+                <h3>Documenti</h3>
+                <ul>                   
+                    <li>🔒 <a href="#">Informativa sulla Privacy</a></li>
+                    <li>📌 <a href="regolamento.pdf">regolamento</a></li>
+                </ul>
+            </div>
+        </div>
         
-        const dataIscrizione = new Date().toLocaleDateString('it-IT');
-        const nomeSquadra = document.getElementById('nomeSquadra').value;
-        const referente = document.getElementById('referente').value;
-        const telefono = document.getElementById('telefono').value;
-        const email = document.getElementById('email').value;
+        <div class="footer-bottom">
+            <p>&copy; 2026 ASD Matelica Volley. Tutti i diritti riservati. | C.F. 01863780431 | Registro Nazionale Attività Sportive Dilettantistiche</p>
+        </div>
+    </footer>
 
-        // Raccogliamo i dati di tutti i giocatori compilati
-        const rows = document.querySelectorAll('.player-row');
-        const rowsData = [];
+    <script>
+        const sheetDB_URL = "https://sheetdb.io/api/v1/tzegsltyrmo8g";
+        const pContainer = document.getElementById('playersContainer');
+        let currentPlayerCount = 0;
 
-        rows.forEach(row => {
-            rowsData.push({
-                dataIscrizione: dataIscrizione,
-                nomeSquadra: nomeSquadra,
-                referente: referente,
-                telefono: telefono,
-                email: email,
-                cognome: row.querySelector('.p-cognome').value,
-                nome: row.querySelector('.p-nome').value,
-                codiceFiscale: row.querySelector('.p-cf').value.toUpperCase(),
-                dataNascita: row.querySelector('.p-data').value,
-                luogoNascita: row.querySelector('.p-luogo').value,
-                indirizzo: row.querySelector('.p-indirizzo').value,
-                taglia: row.querySelector('.p-taglia').value
+        // Funzione per inserire un singolo atleta nel DOM
+        function createPlayerRow(index) {
+            const isRequired = index <= 4; // I primi 4 sono obbligatori
+            const pRow = document.createElement('div');
+            pRow.className = 'player-row';
+            pRow.innerHTML = `
+                <div class="player-title">Atleta ${index} ${isRequired ? '*' : '(Riserva)'}</div>
+                <div class="grid-2">
+                    <div class="form-group"><label>Cognome *</label><input type="text" class="p-cognome" ${isRequired ? 'required' : ''}></div>
+                    <div class="form-group"><label>Nome *</label><input type="text" class="p-nome" ${isRequired ? 'required' : ''}></div>
+                </div>
+                <div class="grid-3">
+                    <div class="form-group"><label>Codice Fiscale *</label><input type="text" class="p-cf" ${isRequired ? 'required' : ''} style="text-transform: uppercase;"></div>
+                    <div class="form-group"><label>Data di Nascita *</label><input type="date" class="p-data" ${isRequired ? 'required' : ''}></div>
+                    <div class="form-group"><label>Luogo di Nascita *</label><input type="text" class="p-luogo" ${isRequired ? 'required' : ''}></div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group"><label>Indirizzo Residenza (Via, Città) *</label><input type="text" class="p-indirizzo" ${isRequired ? 'required' : ''}></div>
+                    <div class="form-group">
+                        <label>Taglia Canotta *</label>
+                        <select class="p-taglia">
+                            <option value="S">S</option>
+                            <option value="M" selected>M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            pContainer.appendChild(pRow);
+        }
+
+        // Genera subito i primi 4 atleti di base obbligatori
+        for (let i = 1; i <= 4; i++) {
+            currentPlayerCount++;
+            createPlayerRow(currentPlayerCount);
+        }
+
+        // Listener per aggiungere altri giocatori liberamente
+        document.getElementById('addPlayerBtn').addEventListener('click', function() {
+            currentPlayerCount++;
+            createPlayerRow(currentPlayerCount);
+        });
+
+        // Gestione dell'invio dei dati
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Sincronizzazione e invio in corso...";
+
+            const nomeSquadra = document.getElementById('nomeSquadra').value;
+            const referente = document.getElementById('referente').value;
+            const telefono = document.getElementById('telefono').value;
+            const email = document.getElementById('email').value;
+            const dataIscrizione = new Date().toLocaleDateString('it-IT');
+
+            const cognomi = document.querySelectorAll('.p-cognome');
+            const nomi = document.querySelectorAll('.p-nome');
+            const codiciFiscali = document.querySelectorAll('.p-cf');
+            const dateNascita = document.querySelectorAll('.p-data');
+            const luoghiNascita = document.querySelectorAll('.p-luogo');
+            const indirizzi = document.querySelectorAll('.p-indirizzo');
+            const taglie = document.querySelectorAll('.p-taglia');
+
+            const rowsToUpload = [];
+
+            // Cicla su TUTTI gli elementi presenti (siano essi 4, 5, 6 o più)
+            for (let i = 0; i < cognomi.length; i++) {
+                // Se è una riserva opzionale e i campi sono vuoti, salta la riga
+                if (i >= 4 && !cognomi[i].value && !nomi[i].value) {
+                    continue; 
+                }
+
+                rowsToUpload.push({
+                    "dataIscrizione": dataIscrizione,
+                    "nomeSquadra": nomeSquadra,
+                    "referente": referente,
+                    "telefono": telefono,
+                    "email": email,
+                    "stato": "stand-by", 
+                    "cognome": cognomi[i].value,
+                    "nome": nomi[i].value,
+                    "codiceFiscale": codiciFiscali[i].value.toUpperCase(),
+                    "dataNascita": dateNascita[i].value,
+                    "luogoNascita": luoghiNascita[i].value,
+                    "indirizzo": indirizzi[i].value,
+                    "taglia": taglie[i].value
+                });
+            }
+
+            // Invio dinamico a SheetDB
+            fetch(sheetDB_URL, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ data: rowsToUpload })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Successo:', data);
+                showSuccessScreen(nomeSquadra);
+            })
+            .catch((error) => {
+                console.error('Errore:', error);
+                alert("Si è verificato un errore durante l'invio cloud. Riprova.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Invia Iscrizione";
             });
         });
 
-        // Invio dei dati a Google Fogli tramite chiamata API
-        fetch(sheetDB_URL, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ data: rowsData })
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('loading').style.display = 'none';
-            alert("Iscrizione inviata con successo! I dati sono stati salvati online.\n\nProcedi ora al pagamento del bonifico bancario come indicato dal regolamento.");
-            document.getElementById('registrationForm').reset();
-        })
-        .catch(error => {
-            document.getElementById('loading').style.display = 'none';
-            console.error('Errore:', error);
-            alert("Si è verificato un errore durante il salvataggio online. Riprova più tardi.");
-        });
-    });
-</script>
+        function showSuccessScreen(teamName) {
+            const container = document.getElementById('formContainer');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <h2 style="color: var(--primary-color); margin-bottom: 15px; text-transform: uppercase;">Iscrizione Registrata!</h2>
+                    <p style="color: var(--text-color); margin-bottom: 25px; font-size: 15px;">
+                        I dati della squadra <strong>${teamName}</strong> sono stati inviati correttamente.
+                    </p>
+                    
+                    <div class="iban-box">
+                        <h4>ℹ️ Completa l'iscrizione con il Bonifico:</h4>
+                        <p><strong>Beneficiario:</strong> Matelica Volley ASD</p>
+                        <p><strong>IBAN:</strong> <span class="iban-code">IT 50 H 05387 68950 000004802927</span></p>
+                        <p><strong>Banca:</strong> BPER BANCA</p>
+                        <p style="margin-top: 12px; border-top: 1px solid var(--border-color); padding-top: 10px;">
+                            <strong>Causale Obbligatoria:</strong> <span style="color: #fff; font-weight: bold;">Iscrizione Queen Volley - ${teamName}</span>
+                        </p>
+                    </div>
 
+                    <p style="color: var(--text-muted); font-size: 13px; margin-top: 25px;">
+                        L'organizzazione verificherà l'accredito bancario e attiverà il tuo team. Riceverai una notifica via email appena la squadra risulterà "Confermata".
+                    </p>
+
+                    <button class="btn" style="margin-top: 30px; max-width: 250px; margin-left: auto; margin-right: auto;" onclick="window.location.reload();">
+                        Chiudi e Torna al Form
+                    </button>
+                </div>
+            `;
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    </script>
 </body>
 </html>
