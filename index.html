@@ -38,12 +38,14 @@
         }
         .logo-matelica {
             height: 85px;
+            max-width: 45%;
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
         }
         .logo-queen {
             height: 55px;
+            max-width: 45%;
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
@@ -79,21 +81,24 @@
                 gap: 15px; 
                 text-align: center;
                 justify-content: center;
+                padding: 15px;
             }
+            .logo-matelica { height: 70px; max-width: 80%; }
+            .logo-queen { height: 48px; max-width: 80%; }
+            .container { padding: 15px; margin: 10px auto; }
         }
         
         .btn { display: block; width: 100%; padding: 14px; background-color: var(--primary-color); color: #000; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: background 0.2s; }
         .btn:hover { background-color: var(--primary-hover); }
         .btn:disabled { background-color: var(--border-color); color: var(--text-muted); cursor: not-allowed; }
 
-        /* Stile specifico per il tasto Aggiungi Atleta, più discreto ma coordinato */
         .btn-secondary { background-color: transparent; color: var(--primary-color); border: 1px dashed var(--primary-color); padding: 10px; font-size: 14px; margin-top: 10px; }
         .btn-secondary:hover { background-color: rgba(212, 175, 55, 0.1); color: var(--primary-hover); }
 
         .iban-box { background: rgba(0,0,0,0.4); border: 1px solid var(--primary-color); padding: 20px; border-radius: 6px; text-align: left; max-width: 550px; margin: 20px auto; }
         .iban-box h4 { color: var(--primary-color); margin-bottom: 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
         .iban-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
-        .iban-code { color: var(--text-color); font-family: monospace; font-size: 15px; letter-spacing: 1px; font-weight: bold; background: rgba(255,255,255,0.05); padding: 3px 6px; border-radius: 4px; }
+        .iban-code { color: var(--text-color); font-family: monospace; font-size: 15px; letter-spacing: 1px; font-weight: bold; background: rgba(255,255,255,0.05); padding: 3px 6px; border-radius: 4px; word-break: break-all; display: inline-block; }
 
         .site-footer {
             background-color: var(--surface-color);
@@ -118,23 +123,11 @@
             margin-bottom: 12px;
             letter-spacing: 0.5px;
         }
-        .footer-section p, .footer-section ul {
-            margin-bottom: 8px;
-        }
-        .footer-section ul {
-            list-style: none;
-        }
-        .footer-section ul li {
-            margin-bottom: 6px;
-        }
-        .footer-section a {
-            color: var(--text-color);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .footer-section a:hover {
-            color: var(--primary-color);
-        }
+        .footer-section p, .footer-section ul { margin-bottom: 8px; }
+        .footer-section ul { list-style: none; }
+        .footer-section ul li { margin-bottom: 6px; }
+        .footer-section a { color: var(--text-color); text-decoration: none; transition: color 0.2s; }
+        .footer-section a:hover { color: var(--primary-color); }
         .footer-bottom {
             max-width: 1100px;
             margin: 20px auto 0 auto;
@@ -187,7 +180,6 @@
                     <div id="playersContainer">
                         <!-- Generati dinamicamente via JS -->
                     </div>
-                    <!-- NUOVO TASTO AGGIUNGI ATLETA -->
                     <button type="button" class="btn btn-secondary" id="addPlayerBtn">+ Aggiungi Atleta</button>
                 </div>
 
@@ -216,7 +208,7 @@
 
             <div class="footer-section">
                 <h3>Documenti</h3>
-                <ul>                   
+                <ul>                                   
                     <li>🔒 <a href="#">Informativa sulla Privacy</a></li>
                     <li>📌 <a href="regolamento.pdf">regolamento</a></li>
                 </ul>
@@ -233,24 +225,23 @@
         const pContainer = document.getElementById('playersContainer');
         let currentPlayerCount = 0;
 
-        // Funzione per inserire un singolo atleta nel DOM
         function createPlayerRow(index) {
-            const isRequired = index <= 4; // I primi 4 sono obbligatori
+            const isRequired = index <= 4; 
             const pRow = document.createElement('div');
             pRow.className = 'player-row';
             pRow.innerHTML = `
                 <div class="player-title">Atleta ${index} ${isRequired ? '*' : '(Riserva)'}</div>
                 <div class="grid-2">
-                    <div class="form-group"><label>Cognome *</label><input type="text" class="p-cognome" ${isRequired ? 'required' : ''}></div>
-                    <div class="form-group"><label>Nome *</label><input type="text" class="p-nome" ${isRequired ? 'required' : ''}></div>
+                    <div class="form-group"><label>Cognome ${isRequired ? '*' : ''}</label><input type="text" class="p-cognome" ${isRequired ? 'required' : ''}></div>
+                    <div class="form-group"><label>Nome ${isRequired ? '*' : ''}</label><input type="text" class="p-nome" ${isRequired ? 'required' : ''}></div>
                 </div>
                 <div class="grid-3">
-                    <div class="form-group"><label>Codice Fiscale *</label><input type="text" class="p-cf" ${isRequired ? 'required' : ''} style="text-transform: uppercase;"></div>
-                    <div class="form-group"><label>Data di Nascita *</label><input type="date" class="p-data" ${isRequired ? 'required' : ''}></div>
-                    <div class="form-group"><label>Luogo di Nascita *</label><input type="text" class="p-luogo" ${isRequired ? 'required' : ''}></div>
+                    <div class="form-group"><label>Codice Fiscale ${isRequired ? '*' : ''}</label><input type="text" class="p-cf" ${isRequired ? 'required' : ''} style="text-transform: uppercase;"></div>
+                    <div class="form-group"><label>Data di Nascita ${isRequired ? '*' : ''}</label><input type="date" class="p-data" ${isRequired ? 'required' : ''}></div>
+                    <div class="form-group"><label>Luogo di Nascita ${isRequired ? '*' : ''}</label><input type="text" class="p-luogo" ${isRequired ? 'required' : ''}></div>
                 </div>
                 <div class="grid-2">
-                    <div class="form-group"><label>Indirizzo Residenza (Via, Città) *</label><input type="text" class="p-indirizzo" ${isRequired ? 'required' : ''}></div>
+                    <div class="form-group"><label>Indirizzo Residenza (Via, Città) ${isRequired ? '*' : ''}</label><input type="text" class="p-indirizzo" ${isRequired ? 'required' : ''}></div>
                     <div class="form-group">
                         <label>Taglia Canotta *</label>
                         <select class="p-taglia">
@@ -265,19 +256,16 @@
             pContainer.appendChild(pRow);
         }
 
-        // Genera subito i primi 4 atleti di base obbligatori
         for (let i = 1; i <= 4; i++) {
             currentPlayerCount++;
             createPlayerRow(currentPlayerCount);
         }
 
-        // Listener per aggiungere altri giocatori liberamente
         document.getElementById('addPlayerBtn').addEventListener('click', function() {
             currentPlayerCount++;
             createPlayerRow(currentPlayerCount);
         });
 
-        // Gestione dell'invio dei dati
         document.getElementById('registrationForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -301,10 +289,9 @@
 
             const rowsToUpload = [];
 
-            // Cicla su TUTTI gli elementi presenti (siano essi 4, 5, 6 o più)
             for (let i = 0; i < cognomi.length; i++) {
-                // Se è una riserva opzionale e i campi sono vuoti, salta la riga
-                if (i >= 4 && !cognomi[i].value && !nomi[i].value) {
+                // Controllo robusto sulle riserve opzionali: se i campi chiave sono vuoti, salta l'intera riga
+                if (i >= 4 && (!cognomi[i].value.trim() || !nomi[i].value.trim())) {
                     continue; 
                 }
 
@@ -315,17 +302,16 @@
                     "telefono": telefono,
                     "email": email,
                     "stato": "stand-by", 
-                    "cognome": cognomi[i].value,
-                    "nome": nomi[i].value,
-                    "codiceFiscale": codiciFiscali[i].value.toUpperCase(),
+                    "cognome": cognomi[i].value.trim(),
+                    "nome": nomi[i].value.trim(),
+                    "codiceFiscale": codiciFiscali[i].value.toUpperCase().trim(),
                     "dataNascita": dateNascita[i].value,
-                    "luogoNascita": luoghiNascita[i].value,
-                    "indirizzo": indirizzi[i].value,
+                    "luogoNascita": luoghiNascita[i].value.trim(),
+                    "indirizzo": indirizzi[i].value.trim(),
                     "taglia": taglie[i].value
                 });
             }
 
-            // Invio dinamico a SheetDB
             fetch(sheetDB_URL, {
                 method: 'POST',
                 headers: {
@@ -334,14 +320,17 @@
                 },
                 body: JSON.stringify({ data: rowsToUpload })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error('Risposta di rete non valida');
+                return response.json();
+            })
             .then(data => {
                 console.log('Successo:', data);
                 showSuccessScreen(nomeSquadra);
             })
             .catch((error) => {
                 console.error('Errore:', error);
-                alert("Si è verificato un errore durante l'invio cloud. Riprova.");
+                alert("Si è verificato un errore durante l'invio cloud. Controlla la connessione e riprova.");
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Invia Iscrizione";
             });
